@@ -64,6 +64,7 @@
 }
 
 - (IBAction)logoutButtonClicked:(id)sender {
+    //logout and change root view back to login page
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -74,12 +75,12 @@
 }
 
 - (NSInteger) tableView: (UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    //return self.arrayOfTweets.count;
-    return 20;
+    return self.arrayOfTweets.count;
+    //return 20;
 }
 
 - (UITableViewCell *) tableView: (UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    //Display the tweet cell with all the information from the tweet at the current index in array
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
     Tweet *tweet = self.arrayOfTweets[indexPath.row];
     
@@ -91,30 +92,30 @@
     [cell.userImage setImageWithURL:url];
     
     cell.usernameLabel.text = tweet.user.name;
-//    NSString *screenname = tweet.user.screenName;
     cell.screenNameLabel.text = tweet.user.screenName; 
     cell.dateLabel.text = tweet.createdAtString;
     cell.tweetText.text = tweet.text;
+    
+    cell.retweetCount.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
+    cell.favoriteCount.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
 
+    cell.tweet = tweet;
+    [cell refreshData];
     return cell;
 }
-
 
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    
+    //Pass the newt tweet information to the composeViewController
     UINavigationController *navigationController = [segue destinationViewController];
     ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
     composeController.delegate = self;
 }
 
-
-
 - (void)didTweet:(nonnull Tweet *)tweet {
+    //new tweet added to timeline and reload timeline to display new tweet
     [self.arrayOfTweets addObject:tweet];
     [self.tableView reloadData];
 }
