@@ -10,6 +10,9 @@
 #import "Tweet.h"
 #import "APIManager.h"
 #import "UIImageView+AFNetworking.h"
+#import "NSDate+DateTools.h"
+//#import "NSDate+TimeAgo.h"
+
 //#import "Asset"
 
 @implementation TweetCell
@@ -35,7 +38,15 @@
     
     self.usernameLabel.text = self.tweet.user.name;
     self.screenNameLabel.text = self.tweet.user.screenName;
-    self.dateLabel.text = self.tweet.createdAtString;
+    
+    //formatting date
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"MM/dd/yy,h:mm a";
+    NSDate *date = [formatter dateFromString:self.tweet.createdAtString];
+    NSString *ago = date.shortTimeAgoSinceNow;
+    self.dateLabel.text = ago;
+    
+    
     self.tweetText.text = self.tweet.text;
     
     self.retweetCount.text = [NSString stringWithFormat:@"%d", self.tweet.retweetCount];
