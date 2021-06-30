@@ -84,20 +84,20 @@
     TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
     Tweet *tweet = self.arrayOfTweets[indexPath.row];
     
-    NSString *URLString = tweet.user.profilePicture;
-    NSURL *url = [NSURL URLWithString:URLString];
-    //NSData *urlData = [NSData dataWithContentsOfURL:url];
-    
-    cell.userImage.image = nil;
-    [cell.userImage setImageWithURL:url];
-    
-    cell.usernameLabel.text = tweet.user.name;
-    cell.screenNameLabel.text = tweet.user.screenName; 
-    cell.dateLabel.text = tweet.createdAtString;
-    cell.tweetText.text = tweet.text;
-    
-    cell.retweetCount.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
-    cell.favoriteCount.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
+//    NSString *URLString = tweet.user.profilePicture;
+//    NSURL *url = [NSURL URLWithString:URLString];
+//    //NSData *urlData = [NSData dataWithContentsOfURL:url];
+//
+//    cell.userImage.image = nil;
+//    [cell.userImage setImageWithURL:url];
+//
+//    cell.usernameLabel.text = tweet.user.name;
+//    cell.screenNameLabel.text = tweet.user.screenName;
+//    cell.dateLabel.text = tweet.createdAtString;
+//    cell.tweetText.text = tweet.text;
+//
+//    cell.retweetCount.text = [NSString stringWithFormat:@"%d", tweet.retweetCount];
+//    cell.favoriteCount.text = [NSString stringWithFormat:@"%d", tweet.favoriteCount];
 
     cell.tweet = tweet;
     [cell refreshData];
