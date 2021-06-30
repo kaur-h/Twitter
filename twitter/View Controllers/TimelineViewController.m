@@ -13,6 +13,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "TweetCell.h"
 #import "ComposeViewController.h"
+#import "DetailsViewController.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -36,6 +37,8 @@
     [self.refreshControl addTarget:self action:@selector(fetchTimeLine) forControlEvents:UIControlEventValueChanged];
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     
+
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(reloadTableView) name:@"refreshTableView" object:nil];
     
 }
 
@@ -109,9 +112,19 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     //Pass the newt tweet information to the composeViewController
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+    if([segue.identifier isEqualToString: @"composeView"]){
+        UINavigationController *navigationController = [segue destinationViewController];
+        ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+        composeController.delegate = self;
+    }
+    if([segue.identifier isEqualToString: @"detailsView"]){
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Tweet *tweet = self.arrayOfTweets[indexPath.row];
+        DetailsViewController *detailController = [segue destinationViewController];
+        detailController.tweet = tweet;
+    }
+    
 }
 
 - (void)didTweet:(nonnull Tweet *)tweet {
@@ -119,5 +132,7 @@
     [self.arrayOfTweets addObject:tweet];
     [self.tableView reloadData];
 }
-
+-(void)reloadTableView{
+    [self.tableView reloadData];
+}
 @end
