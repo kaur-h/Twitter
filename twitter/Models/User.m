@@ -16,7 +16,10 @@
         self.name = dictionary[@"name"];
         self.screenName = [@"@" stringByAppendingString:dictionary[@"screen_name"]];
         self.profilePicture = dictionary[@"profile_image_url_https"];
-        
+        self.backgroundPicture = dictionary[@"profile_background_image_url_https"];
+        NSLog(@"%@", self.backgroundPicture);
+        self.followersCount = [NSString stringWithFormat:@"%@", dictionary[@"followers_count"]];
+        self.followingCount = [NSString stringWithFormat:@"%@", dictionary[@"friends_count"]];  
     // Initialize any other properties
     }
     return self;

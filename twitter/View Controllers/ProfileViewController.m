@@ -8,8 +8,15 @@
 
 #import "ProfileViewController.h"
 #import "APIManager.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface ProfileViewController ()
+@property (weak, nonatomic) IBOutlet UIImageView *backdropImage;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImage;
+@property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *screenNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *followingCount;
+@property (weak, nonatomic) IBOutlet UILabel *followersCount;
 
 @end
 
@@ -17,23 +24,41 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self didTapProfile];
     // Do any additional setup after loading the view.
-    [[APIManager shared] getUserInfo:^(NSDictionary *userInfoDic, NSError *error) {
-        if (userInfoDic) {
-            NSLog(@"Successfully loaded user info");
-            self.userNameLabel.text = userInfoDic[@"name"];
-            self.screenNameLabel.text = userInfoDic[@"screen_name"];
-            NSString *URLString = userInfoDic[@"profile_image_url_https"];
-            NSURL *url = [NSURL URLWithString:URLString];
+}
+
+-(void)didTapProfile{
+    [[APIManager shared] getUserInfoBasedOnName:self.user.name completion:^(User *user, NSError *error){
+        if(error){
+             NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
+        }
+        else{
+            NSLog(@"Successfully found user info");
+            self.userNameLabel.text = self.user.name;
+            self.screenNameLabel.text = self.user.screenName;
+            self.followingCount.text = self.user.followingCount;
+            self.followersCount.text = self.user.followersCount;
             
+            //Profile Image
+            NSString *URLString = self.user.profilePicture;
+            NSURL *url = [NSURL URLWithString:URLString];
+            NSLog(@"%@", URLString);
             self.profileImage.image = nil;
             [self.profileImage setImageWithURL:url];
             
-        } else {
-            NSLog(@" Error getting user info: %@", error.localizedDescription);
+            //Backdrop Image
+            NSString *URLStringBackdrop = self.user.backgroundPicture;
+            if(!URLStringBackdrop){
+                NSURL *urlbackdrop = [NSURL URLWithString:URLStringBackdrop];
+
+                self.backdropImage.image = nil;
+                [self.backdropImage setImageWithURL:urlbackdrop];
+            }
+
         }
-    
     }];
+    
 }
 
 /*

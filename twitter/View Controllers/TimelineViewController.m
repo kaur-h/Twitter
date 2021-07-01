@@ -131,6 +131,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
         Tweet *tweet = self.arrayOfTweets[indexPath.row];
         ProfileViewController *profileController =  [segue destinationViewController];
+//        profileController.user = nil;
         profileController.user = tweet.user;
     }
     

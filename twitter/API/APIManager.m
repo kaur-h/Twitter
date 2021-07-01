@@ -104,8 +104,8 @@ static NSString * const baseURLString = @"https://api.twitter.com";
     NSDictionary *parameters = @{@"status": text};
     
     [self GET:urlString parameters:parameters  progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable userDictionary) {
-        Tweet *tweet = [[Tweet alloc]initWithDictionary:userDictionary];
-        completion(tweet, nil);
+        User *user = [[User alloc]initWithDictionary:userDictionary];
+        completion(user, nil);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         completion(nil, error);
     }];
