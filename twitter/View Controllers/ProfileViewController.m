@@ -1,30 +1,23 @@
 //
-//  ComposeViewController.m
+//  ProfileViewController.m
 //  twitter
 //
-//  Created by Harleen Kaur on 6/29/21.
+//  Created by Harleen Kaur on 7/1/21.
 //  Copyright © 2021 Emerson Malca. All rights reserved.
 //
 
-#import "ComposeViewController.h"
+#import "ProfileViewController.h"
 #import "APIManager.h"
-#import "Tweet.h"
-#import "UIImageView+AFNetworking.h"
 
-@interface ComposeViewController ()
-@property (weak, nonatomic) IBOutlet UITextView *tweetTextView;
-@property (weak, nonatomic) IBOutlet UIImageView *profileImage;
-@property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *screenNameLabel;
+@interface ProfileViewController ()
 
 @end
 
-@implementation ComposeViewController
+@implementation ProfileViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     [[APIManager shared] getUserInfo:^(NSDictionary *userInfoDic, NSError *error) {
         if (userInfoDic) {
             NSLog(@"Successfully loaded user info");
@@ -42,26 +35,6 @@
     
     }];
 }
-
-- (IBAction)tweetButtonClicked:(id)sender {
-    NSString *tweetText = self.tweetTextView.text;
-    [[APIManager shared] postStatusWithText:tweetText completion:^(Tweet *tweet, NSError *error) {
-        if(tweet){
-            [self.delegate didTweet:tweet];
-            NSLog(@"Successfully posted tweet!");
-            [self dismissViewControllerAnimated:true completion:nil];
-        }else {
-            NSLog(@"Error posting tweet: %@", error.localizedDescription);
-        }
-    }];
-}
-
-- (IBAction)cancelButtonClicked:(id)sender {
-    [self dismissViewControllerAnimated:true completion:nil];
-}
-
-
-
 
 /*
 #pragma mark - Navigation

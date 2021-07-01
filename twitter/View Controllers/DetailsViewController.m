@@ -10,6 +10,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "APIManager.h"
 #import "TimelineViewController.h"
+#import "ProfileViewController.h"
 
 @interface DetailsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *profileImage;
@@ -51,6 +52,9 @@
     
     [self favoritedOrRetweeteed];
     
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageTapped)];
+    [self.profileImage addGestureRecognizer:tapRecognizer];
+    [self.profileImage setUserInteractionEnabled:YES];
 }
 
 -(void) favoritedOrRetweeteed{
@@ -141,6 +145,12 @@
     }
 }
 
+- (void) profileImageTapped{
+    NSLog(@"Profile Image Clicked");
+    ProfileViewController *controler = [[ProfileViewController alloc] init];
+    [self.navigationController pushViewController:controler animated:NO];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -151,5 +161,6 @@
  
 }
 */
+
 
 @end

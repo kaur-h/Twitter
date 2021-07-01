@@ -90,6 +90,27 @@ static NSString * const baseURLString = @"https://api.twitter.com";
 
 }
 
+- (void) getUserInfo:(void(^)(NSDictionary *userInfoDic, NSError *error))completion{
+    NSString *urlString = @"1.1/account/verify_credentials.json";
+    [self GET:urlString parameters:nil  progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable userDictionary) {
+        completion(userDictionary, nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
+}
+
+-(void) getUserInfoBasedOnName:(NSString *)text completion:(void (^)(User * user, NSError * error))completion{
+    NSString *urlString = @"1.1/account/verify_credentials.json";
+    NSDictionary *parameters = @{@"status": text};
+    
+    [self GET:urlString parameters:parameters  progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary *  _Nullable userDictionary) {
+        Tweet *tweet = [[Tweet alloc]initWithDictionary:userDictionary];
+        completion(tweet, nil);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
+}
+
 // TODO: Post Composed Tweet Method
 - (void)postStatusWithText:(NSString *)text completion:(void (^)(Tweet *, NSError *))completion{
     NSString *urlString = @"1.1/statuses/update.json";

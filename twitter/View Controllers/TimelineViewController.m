@@ -14,6 +14,7 @@
 #import "TweetCell.h"
 #import "ComposeViewController.h"
 #import "DetailsViewController.h"
+#import "ProfileViewController.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -104,6 +105,7 @@
 
     cell.tweet = tweet;
     [cell refreshData];
+    cell.delegate = self;
     return cell;
 }
 
@@ -124,6 +126,13 @@
         DetailsViewController *detailController = [segue destinationViewController];
         detailController.tweet = tweet;
     }
+    if([segue.identifier isEqualToString:@"profileView"]){
+        UITableViewCell *tappedCell = sender;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+        Tweet *tweet = self.arrayOfTweets[indexPath.row];
+        ProfileViewController *profileController =  [segue destinationViewController];
+        profileController.user = tweet.user;
+    }
     
 }
 
@@ -135,4 +144,10 @@
 -(void)reloadTableView{
     [self.tableView reloadData];
 }
+
+
+- (void)tweetCell:(TweetCell *)tweetCell didTap:(User *)user{
+    [self performSegueWithIdentifier:@"profileView" sender:user];
+}
+
 @end
